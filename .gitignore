@@ -1,0 +1,11 @@
+/target/
+nb-configuration.xml
+*.iml
+/.idea/
+/.metadata/
+/.settings/
+*.NavData
+.project
+.classpath
+.wtpmodules
+.springBeans
