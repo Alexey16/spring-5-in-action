@@ -12,9 +12,9 @@ import tacos.Ingredient.Type;
 import tacos.Taco;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Controller
@@ -56,13 +56,7 @@ public class DesignTacoController {
     }
 
     private List<Ingredient> filterByType(List<Ingredient> ingredients, Type type) {
-        List<Ingredient> ingredientList = new ArrayList<>();
-        for (Ingredient ingredient : ingredients) {
-            if (ingredient.getType().equals(type)) {
-                ingredientList.add(ingredient);
-            }
-        }
-        return ingredientList;
+        return ingredients.stream().filter(ingredient -> ingredient.getType().equals(type)).collect(Collectors.toList());
     }
 
 }
