@@ -8,6 +8,7 @@ import tacos.Ingredient;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+//annotation @Repository include @component and @Controller
 @Repository
 public class JdbcIngredientRepository implements IngredientRepository {
     private JdbcTemplate jdbcTemplate;
