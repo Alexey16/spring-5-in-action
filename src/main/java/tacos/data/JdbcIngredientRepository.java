@@ -10,7 +10,7 @@ import java.sql.SQLException;
 
 //annotation @Repository include @component and @Controller
 @Repository
-public class JdbcIngredientRepository implements IngredientRepository {
+public class JdbcIngredientRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
@@ -18,17 +18,14 @@ public class JdbcIngredientRepository implements IngredientRepository {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
     public Iterable<Ingredient> findAll() {
         return jdbcTemplate.query("select id, name, type from Ingredient", this::mapRowToIngredient);
     }
 
-    @Override
     public Ingredient findOne(String id) {
         return jdbcTemplate.queryForObject("select id, name, type from Ingredient where id = ?", this::mapRowToIngredient, id);
     }
 
-    @Override
     public Ingredient save(Ingredient ingredient) {
         jdbcTemplate.update(
                 "insert into Ingredient (id, name, type) values (?, ?, ?)",
