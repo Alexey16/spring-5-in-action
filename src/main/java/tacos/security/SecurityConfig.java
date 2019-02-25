@@ -40,15 +40,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                     .formLogin()
                     .loginPage("/login")
+                    .defaultSuccessUrl("/design", true)
                 .and()
                     .logout()
-                    .logoutSuccessUrl("/")
+                    .logoutSuccessUrl("/login")
                 .and()
                     .csrf()
-                    .ignoringAntMatchers("/h2-console/**")
-                .and()
-                    .headers()
-                    .frameOptions()
-                    .sameOrigin();
+                    .ignoringAntMatchers("/h2-console/**");
     }
 }

@@ -14,6 +14,7 @@ import tacos.Taco;
 import tacos.User;
 import tacos.data.IngredientRepository;
 import tacos.data.TacoRepository;
+import tacos.data.UserRepository;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -30,23 +31,13 @@ public class DesignTacoController {
 
     private TacoRepository designRepo;
 
+    private UserRepository userRepository;
+
     @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository tacoRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository, TacoRepository tacoRepository, UserRepository userRepository) {
         this.ingredientRepo = ingredientRepository;
         this.designRepo = tacoRepository;
-    }
-
-    @GetMapping
-    public String showDesignForm(Model model) {
-        List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepo.findAll().forEach(ingredients::add);
-
-        Type[] types = Type.values();
-        for (Type type : types) {
-            model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
-        }
-        model.addAttribute("design", new Taco());
-        return  "design";
+        this.userRepository = userRepository;
     }
 
     @ModelAttribute(name = "order")
@@ -57,6 +48,24 @@ public class DesignTacoController {
     @ModelAttribute(name = "taco")
     public Taco taco() {
         return new Taco();
+    }
+
+    @GetMapping
+    public String showDesignForm(Model model, @AuthenticationPrincipal User user) {
+        User currentUser = userRepository.findByUsername(user.getUsername());
+        if (currentUser != null) {
+            model.addAttribute("user", user);
+            List<Ingredient> ingredients = new ArrayList<>();
+            ingredientRepo.findAll().forEach(ingredients::add);
+
+            Type[] types = Type.values();
+            for (Type type : types) {
+                model.addAttribute(type.toString().toLowerCase(), filterByType(ingredients, type));
+            }
+            model.addAttribute("design", new Taco());
+            return  "design";
+        }
+        return "redirect:/register";
     }
 
     @PostMapping

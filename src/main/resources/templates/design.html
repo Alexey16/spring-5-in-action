@@ -13,7 +13,7 @@
         <input type="submit" value="Logout"/>
     </form>
 
-    <form method="POST" th:object="${design}">
+    <form method="POST" th:object="${design}" th:action="@{/design}" id="tacoForm">
         <div class="grid">
             <div class="ingredient-group" id="wraps">
                 <h3>Designate your wrap:</h3>
