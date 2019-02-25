@@ -1,8 +1,11 @@
 package tacos.web;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
@@ -19,6 +22,8 @@ import javax.validation.Valid;
 public class OrderController {
 
     private OrderRepository orderRepo;
+
+    private OrderProps orderProps;
 
     public OrderController(OrderRepository orderRepo) {
         this.orderRepo = orderRepo;
@@ -42,6 +47,13 @@ public class OrderController {
             order.setZip(user.getZip());
         }
         return "orderForm";
+    }
+
+    @GetMapping
+    public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
+        Pageable pageable = PageRequest.of(0, orderProps.getPageSize());
+        model.addAttribute("orders", orderRepo.findByUserOrderByPlacedAtDesc(user, pageable));
+        return "orderList";
     }
 
     @PostMapping
